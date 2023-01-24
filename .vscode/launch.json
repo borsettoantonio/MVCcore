@@ -20,7 +20,7 @@
                 "pattern": "\\bIn ascolto su:\\s+(https?://\\S+)",
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Developmentxxx"
+                "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
