@@ -10,6 +10,8 @@ namespace CorsoMVCcore
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllersWithViews();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -18,12 +20,11 @@ namespace CorsoMVCcore
             }
 
             app.UseStaticFiles();
-
-            app.Run(async context =>
-                {
-                    context.Response.ContentType="html";
-                    await context.Response.WriteAsync("<html><body><img src='img1.jpg' alt='My image' /></body></html>");
-                });
+            
+            // versine per Core 7
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             // senza questa istruzione il programma chiude subito senza mostrare la pagina.
             app.Run();
