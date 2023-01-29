@@ -6,11 +6,11 @@ namespace MyCourse.Controllers
     {
         public IActionResult Index()
         {
-            return Content("<html><body>Sono <h1>Index</h1></body></html>","text/html");
+            return View();
         }
         public IActionResult Detail(string id)
         {
-             return Content($"Sono Detail con id: {id}");
+            return View();
         }
     }
 }

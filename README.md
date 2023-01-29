@@ -1,7 +1,11 @@
 # MVCcore
-Corso Udemy MVC Core - WebHD_06-3 Primo controller
+Corso Udemy MVC Core - WebHD_07-5 Le View
 
-26.01.2023
+28.01.2023
 
-Scrittura di un semplice controller.
-Aggiunta di servizi e routing alla classe Program, aggiornata a core 7.
+View di contenuto e view di layout.
+File _Layout.cshtml e _ViewStart.cshtml.
+Body e sezioni nelle view di layout e contenuto.
+Inserita una barra di navigazione da Bootstrap.
+Esempio di uso di FontAwesome
+Commenti su pagina razor: @*  *@
