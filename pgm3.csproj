@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <PackageReference Include="microsoft.data.sqlite" Version="7.0.2" />
   </ItemGroup>
 

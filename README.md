@@ -1,9 +1,8 @@
 # MVCcore
-Corso Udemy MVC Core - WebHD_07-8 Struttura pagina corsi
+Corso Udemy MVC Core - WebHD_08-6 Fine sezione 8
 
-30.01.2023
+02.02.2023
 
-Tag helper: asp-action, asp-controller, asp-page
-Tag helper environment
-Strutturazione della pagina dei corsi, con inserimento 
-del foglio di stile style.css
+Introduzione del ViewModel per la lista dei corsi,
+e per il dettaglio di un corso.
+Uso di ViewData e ViewBag per scambiare dati con la vista di layout.
