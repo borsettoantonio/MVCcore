@@ -1,7 +1,4 @@
-/*
-Ho aggiunto il namespace, la classe Program, ed il metodo Main al template del dotnet.
-Ho fatto qualche prova su come mandare del testo in output come pagina HTML.
-*/
+using MyCourse.Models.Services.Application;
 
 namespace CorsoMVCcore
 {
@@ -11,6 +8,7 @@ namespace CorsoMVCcore
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllersWithViews();
+            builder.Services.AddTransient<ICourseService,CourseService>();
 
             var app = builder.Build();
 
