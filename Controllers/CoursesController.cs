@@ -11,16 +11,14 @@ namespace MyCourse.Controllers
         {
             this.courseService=courseService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var courseService=new CourseService();
-            List<CourseViewModel> courses= courseService.GetCourses();
+            List<CourseViewModel> courses= await courseService.GetCoursesAsync();
             return View(courses);
         }
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-             var courseService=new CourseService();
-             CourseDetailModel viewModel=courseService.GetCourse(id);
+             CourseDetailModel viewModel=await courseService.GetCourseAsync(id);
             return View(viewModel);
         }
     }

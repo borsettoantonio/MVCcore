@@ -1,12 +1,8 @@
 # MVCcore
-Corso Udemy MVC Core - WebHD_09-3 Fine sezione 9
+Corso Udemy MVC Core - Fine sezione 10. Accesso ai dati
 
-02.02.2023
+03.02.2023
 
-Dependency injection.
-Uso di  builder.Services.AddTransient<CourseService>();
-oppure AddScoped per avere un oggetto che vive per tutta e sola la richiesta
-oppure AddSingleton per un oggetto unico anche tra diverse richieste.
-Con AddSingleton bisogna usare classi thread-safe.
-Ad esempio usare Interlocked.Increment(ref count); per rendere thread-safe
-un ipotetico contatore.
+Accesso ai dati con ADO e Sqlite.
+Inserimento dei parametri nelle query, evitando la sql injection.
+Operazioni asincrone in C#.
