@@ -1,8 +1,14 @@
 # MVCcore
-Corso Udemy MVC Core - Fine sezione 10. Accesso ai dati
+Corso Udemy MVC Core - Fine sezione 11. Accesso ai dati con Entity Framework
 
-03.02.2023
+05.02.2023
 
-Accesso ai dati con ADO e Sqlite.
-Inserimento dei parametri nelle query, evitando la sql injection.
-Operazioni asincrone in C#.
+Non ho usato Entity Framework, che non mi piace,
+ma ho usato SQL per leggere dal database,
+e LINQ per mappare i dati dalle tabelle del dataset restituito
+alle classi del viewmodel.
+Uso dell'inserimento automatico dei parametri nella query SQL
+usando FormattableString.
+
+Utilizzo della istruzione using con gli oggetti disposable.
+

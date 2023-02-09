@@ -1,28 +1,32 @@
 using System.Data;
 using Microsoft.Data.Sqlite;
+using System.Linq;
+using System.Configuration;
 
 namespace MyCourse.Models.Services.Infrastructure
 {
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
+        
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
         {
             // sanificazione contro la SQL Injection
-            var queryArguments=formattableQuery.GetArguments();
+            var queryArguments = formattableQuery.GetArguments();
             var sqliteParameters = new List<SqliteParameter>();
-            for(int i=0;i< queryArguments.Length; i++)
+            for (int i = 0; i < queryArguments.Length; i++)
             {
-                var parameter = new SqliteParameter(i.ToString() ,queryArguments[i]);
+                var parameter = new SqliteParameter(i.ToString(), queryArguments[i]);
                 sqliteParameters.Add(parameter);
-                queryArguments[i]="@" + i;
+                queryArguments[i] = "@" + i;
             }
-            string query= formattableQuery.ToString();
+            string query = formattableQuery.ToString();
 
             using (var conn = new SqliteConnection("Data Source=Data/MyCourse.db"))
             {
                 await conn.OpenAsync();
                 using (var cmd = new SqliteCommand(query, conn))
-                {cmd.Parameters.AddRange(sqliteParameters);
+                {
+                    cmd.Parameters.AddRange(sqliteParameters);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
