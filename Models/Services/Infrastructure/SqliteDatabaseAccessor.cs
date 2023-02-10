@@ -7,7 +7,13 @@ namespace MyCourse.Models.Services.Infrastructure
 {
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
-        
+        private readonly IConfiguration config;
+
+        public SqliteDatabaseAccessor(IConfiguration config)
+        {
+            this.config = config;
+        }
+
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
         {
             // sanificazione contro la SQL Injection
@@ -21,7 +27,7 @@ namespace MyCourse.Models.Services.Infrastructure
             }
             string query = formattableQuery.ToString();
 
-            using (var conn = new SqliteConnection("Data Source=Data/MyCourse.db"))
+            using (var conn = new SqliteConnection(config.GetSection("ConnectionStrings").GetValue<string>("Default")))
             {
                 await conn.OpenAsync();
                 using (var cmd = new SqliteCommand(query, conn))

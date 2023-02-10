@@ -4,19 +4,30 @@ using MyCourse.Models.ViewModels;
 using System.Linq;
 using MyCourse.Models.ValueObjects;
 using MyCourse.Models.Enums;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Options;
 
 namespace MyCourse.Models.Services.Application
 {
     public class AdoNetCourseService : ICourseService
     {
         private readonly IDatabaseAccessor db;
+        private readonly IConfiguration coursesOptions;
+        IOptions<CoursesOptions> options;
 
-        public AdoNetCourseService(IDatabaseAccessor db)
+        public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options)
         {
             this.db = db;
+            this.coursesOptions=coursesOptions;
+            this.options = options;
         }
+
         public async Task<CourseDetailModel> GetCourseAsync(int id)
         {
+            // prova accesso alle opzioni di configurazione
+            CoursesOptions opt = new CoursesOptions();
+            coursesOptions.GetSection(CoursesOptions.Courses).Bind(opt);
+
             FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}
             ; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId={id}";
 

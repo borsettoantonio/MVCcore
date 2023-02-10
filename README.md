@@ -1,14 +1,38 @@
 # MVCcore
-Corso Udemy MVC Core - Fine sezione 11. Accesso ai dati con Entity Framework
+Corso Udemy MVC Core - WebHD_12-2 Servizio di configurazione con json
+10.02.2023
 
-05.02.2023
+Uso del servizio di configurazione.
 
-Non ho usato Entity Framework, che non mi piace,
-ma ho usato SQL per leggere dal database,
-e LINQ per mappare i dati dalle tabelle del dataset restituito
-alle classi del viewmodel.
-Uso dell'inserimento automatico dei parametri nella query SQL
-usando FormattableString.
+Primo metodo:
 
-Utilizzo della istruzione using con gli oggetti disposable.
+usato nel metodo SqliteDatabaseAccessor.QueryAsync: il costruttore
+riceve per dependency injection una istanza di IConfiguration config 
+con cui accedere alle sezioni del file appsettings.jason con
+
+config.GetSection("ConnectionStrings").GetValue<string>("Default")
+
+
+Secondo metodo:
+
+usato nel metodo AdoNetCourseService.GetCourseAsync: si utilizza una classe 
+che conterrà le opzioni e se ne crea una istanza; 
+come prima si ottine un oggetto IConfiguration coursesOptions
+per dependency injection, e si collega l'oggetto delle opzioni con il file
+appsettins.jason con:
+
+CoursesOptions opzioni=new CoursesOptions();
+
+coursesOptions.GetSection(CoursesOptions.Position).Bind(opzioni);
+
+Terzo metodo:
+
+nel Main si usa:
+
+builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection(CoursesOptions.Courses));
+
+per collegare il file jason con la classe CoursesOptions. Quindi nelle classi dove serve
+si inietta una istanza di IOptions<CoursesOptions> options, che una istanza della classe 
+CoursesOptions che descrive le opzioni.
+
 
