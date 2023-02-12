@@ -6,24 +6,30 @@ using MyCourse.Models.ValueObjects;
 using MyCourse.Models.Enums;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Options;
+using MyCourse.Models.Exceptions;
 
 namespace MyCourse.Models.Services.Application
 {
     public class AdoNetCourseService : ICourseService
     {
+        private readonly ILogger<AdoNetCourseService> logger;
         private readonly IDatabaseAccessor db;
         private readonly IConfiguration coursesOptions;
         IOptions<CoursesOptions> options;
 
-        public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options)
+        public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options,
+                                    ILogger<AdoNetCourseService> logger)
         {
             this.db = db;
             this.coursesOptions=coursesOptions;
             this.options = options;
+            this.logger = logger;
         }
 
         public async Task<CourseDetailModel> GetCourseAsync(int id)
         {
+            logger.LogInformation("Course {id} requested",id);
+
             // prova accesso alle opzioni di configurazione
             CoursesOptions opt = new CoursesOptions();
             coursesOptions.GetSection(CoursesOptions.Courses).Bind(opt);
@@ -37,7 +43,7 @@ namespace MyCourse.Models.Services.Application
             var courseTable = dataSet.Tables[0];
             if (courseTable.Rows.Count != 1)
             {
-                throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
+                throw new CourseNotFoundException(id);
             }
 
             /*

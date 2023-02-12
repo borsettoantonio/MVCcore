@@ -8,14 +8,19 @@ namespace MyCourse.Models.Services.Infrastructure
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
         private readonly IConfiguration config;
+        private readonly ILogger<SqliteDatabaseAccessor> logger;
 
-        public SqliteDatabaseAccessor(IConfiguration config)
+        public SqliteDatabaseAccessor(IConfiguration config, ILogger<SqliteDatabaseAccessor> logger)
         {
             this.config = config;
+             this.logger = logger;
         }
 
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
         {
+            logger.LogInformation(formattableQuery.Format,formattableQuery.GetArguments());
+            //logger.LogInformation(formattableQuery.Format);
+
             // sanificazione contro la SQL Injection
             var queryArguments = formattableQuery.GetArguments();
             var sqliteParameters = new List<SqliteParameter>();
