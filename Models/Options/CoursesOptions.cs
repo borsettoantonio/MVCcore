@@ -6,6 +6,7 @@ namespace MyCourse.Models.Options
         public long PerPage { get; set; }
 
         public CoursesOrderOptions Order { get; set; }
+        public int CacheDuration { get; set; }
     }
 
     public partial class CoursesOrderOptions
