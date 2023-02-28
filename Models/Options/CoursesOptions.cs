@@ -3,7 +3,7 @@ namespace MyCourse.Models.Options
     public partial class CoursesOptions
     {
         public const string Courses = "Courses";
-        public long PerPage { get; set; }
+        public int PerPage { get; set; }
 
         public CoursesOrderOptions Order { get; set; }
         public int CacheDuration { get; set; }

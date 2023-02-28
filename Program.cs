@@ -12,6 +12,7 @@ namespace CorsoMVCcore
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddResponseCaching();
+            //builder.Services.AddOutputCache();
 
             // middleware per MVC
             // builder.Services.AddControllersWithViews();
@@ -19,9 +20,9 @@ namespace CorsoMVCcore
             // middleware per MVC con aggiunta di un profilo
             builder.Services.AddControllersWithViews(options =>
             {
-                var homeProfile= new Microsoft.AspNetCore.Mvc.CacheProfile();
+                var homeProfile= new CacheProfile();
                 // per far variare la chiave di caching anche al variare del parametro "page" sulla querystring
-                //homeProfile.VaryByQueryKeys = new string[]{"page"};
+               // homeProfile.VaryByQueryKeys = new string[]{"page"};
                 // oppure si può usare il profilo
                 
                 //homeProfile.Duration= builder.Configuration.GetValue<int>("ResponseCache:Home:Duration");
@@ -51,6 +52,8 @@ namespace CorsoMVCcore
 
             app.UseStaticFiles();
             app.UseResponseCaching();
+            //app.UseOutputCache();
+
             // versine per Core 7
             app.MapControllerRoute(
                 name: "default",

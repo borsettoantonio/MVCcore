@@ -2,6 +2,7 @@ using System.Data;
 using Microsoft.Data.Sqlite;
 using System.Linq;
 using System.Configuration;
+using MyCourse.Models.ValueObjects;
 
 namespace MyCourse.Models.Services.Infrastructure
 {
@@ -26,6 +27,9 @@ namespace MyCourse.Models.Services.Infrastructure
             var sqliteParameters = new List<SqliteParameter>();
             for (int i = 0; i < queryArguments.Length; i++)
             {
+                if(queryArguments[i] is Sql){
+                    continue;
+                }
                 var parameter = new SqliteParameter(i.ToString(), queryArguments[i]);
                 sqliteParameters.Add(parameter);
                 queryArguments[i] = "@" + i;

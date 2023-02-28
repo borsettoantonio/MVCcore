@@ -14,7 +14,7 @@ namespace MyCourse.Models.Services.Application
         {
             this.courseService = courseService;
             this.memoryCache = memoryCache;
-            this.options=options;
+            this.options = options;
         }
         public Task<CourseDetailModel> GetCourseAsync(int id)
         {
@@ -26,13 +26,13 @@ namespace MyCourse.Models.Services.Application
             })!;
         }
 
-        public Task<List<CourseViewModel>> GetCoursesAsync()
+        public Task<List<CourseViewModel>> GetCoursesAsync(string search,int page,string orderby,bool ascending)
         {
-            return memoryCache.GetOrCreateAsync("Course", cacheEntry =>
+            return memoryCache.GetOrCreateAsync($"Course{search}-{page}-{orderby}-{ascending}", cacheEntry =>
              {
-                cacheEntry.SetSize(1);
+                 cacheEntry.SetSize(1);
                  cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(options.Value.CacheDuration));
-                 return courseService.GetCoursesAsync();
+                 return courseService.GetCoursesAsync(search,page,orderby,ascending);
              })!;
         }
     }

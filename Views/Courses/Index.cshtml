@@ -1,6 +1,32 @@
 @model List<CourseViewModel>
 
-<h1>Catalogo dei corsi</h1>
+<div class="row">
+    <div class="col-md-8">
+        <h1>
+            @ViewData["Title"]
+        </h1>
+
+    </div>
+    <div class="col-md-4 d-flex align-items-center">
+        <form asp-controller="Courses" asp-action="Index" method="get">
+            <div class="input-group margin-bottom-sm">
+                <input type="text" name="search" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
+                    aria-describedby="search-button">
+                <div class="input-group-append input-group-text">
+                    <button id="search-button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-5"><a asp-route-orderby="Title" asp-route-ascending="true">Titolo</a> </div>
+    <div class="col-md-2"><a asp-route-orderby="Rating" asp-route-ascending="true">Valutazione</a></div>
+    <div class="col-md-2"><a asp-route-orderby="CurrentPrice" asp-route-ascending="true">Prezzo</a></div>
+    <div class="col-md-2"></div>
+</div>
 
 @foreach (CourseViewModel course in Model)
 {
@@ -36,7 +62,7 @@
 
         <div class="col-md-2 price">
             @course.CurrentPrice
-            @if (!course.CurrentPrice.Equals(course.FullPrice))
+            @if (!course.CurrentPrice!.Equals(course.FullPrice))
             {
                 <br />
                 <s>@course.FullPrice</s>
@@ -50,3 +76,17 @@
         <div style="height: 30px;"></div>
     </div>
 }
+
+<nav aria-label="Page navigation">
+    <ul class="pagination d-flex justify-content-center mt-3">
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" asp-route-page="1">1 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-route-page="2">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-route-page="3">3</a>
+        </li>
+    </ul>
+</nav>
