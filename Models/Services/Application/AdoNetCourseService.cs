@@ -7,6 +7,7 @@ using MyCourse.Models.Enums;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Options;
 using MyCourse.Models.Exceptions;
+using MyCourse.Models.InputModels;
 
 namespace MyCourse.Models.Services.Application
 {
@@ -89,25 +90,16 @@ namespace MyCourse.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync(string search,int page,string orderby,bool ascending)
+        public async Task<List<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
-            page=Math.Max(1,page);
-            int limit = options.Value.PerPage;
-            int offset = (page-1 )* limit;
-
-            var ordeOptions=options.Value.Order;
-            if(!ordeOptions.Allow.Contains(orderby))
-            {
-                orderby= ordeOptions.By;
-                ascending=ordeOptions.Ascending;
-            }
-            if(orderby=="CurrentPrice")
+            string orderby=model.OrderBy;
+            if(model.OrderBy=="CurrentPrice")
             {
                 orderby="CurrentPrice_Amount";
             }
-            string direction= ascending ? "ASC" : "DESC";
+            string direction= model.Ascending ? "ASC" : "DESC";
 
-            FormattableString query = $"SELECT Id,Title,ImagePath,Author,Rating, FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency  FROM COURSES WHERE Title LIKE {"%" +  search + "%"}  ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {limit} OFFSET {offset} " ;          
+            FormattableString query = $"SELECT Id,Title,ImagePath,Author,Rating, FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency  FROM COURSES WHERE Title LIKE {"%" +  model.Search + "%"}  ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset} " ;          
             DataSet dataSet = await db.QueryAsync(query);
              var table = dataSet.Tables[0];
             /*

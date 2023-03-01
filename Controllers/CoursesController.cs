@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
+using MyCourse.Models.InputModels;
 
 namespace MyCourse.Controllers
 {
@@ -13,9 +14,9 @@ namespace MyCourse.Controllers
         }
 
         [ResponseCache(CacheProfileName ="Home")]
-        public async Task<IActionResult> Index(string search,int page,string orderby,bool ascending)
+        public async Task<IActionResult> Index(CourseListInputModel model)
         {
-            List<CourseViewModel> courses= await courseService.GetCoursesAsync(search,page,orderby, ascending);
+            List<CourseViewModel> courses= await courseService.GetCoursesAsync(model);
             ViewData["Title"] = "Catalogo dei corsi";
             return View(courses);
         }
