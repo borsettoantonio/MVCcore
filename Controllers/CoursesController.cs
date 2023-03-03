@@ -14,11 +14,17 @@ namespace MyCourse.Controllers
         }
 
         [ResponseCache(CacheProfileName ="Home")]
-        public async Task<IActionResult> Index(CourseListInputModel model)
+        public async Task<IActionResult> Index(CourseListInputModel input)
         {
-            List<CourseViewModel> courses= await courseService.GetCoursesAsync(model);
+            List<CourseViewModel> courses= await courseService.GetCoursesAsync(input);
             ViewData["Title"] = "Catalogo dei corsi";
-            return View(courses);
+            CourseListViewModel viewModel= new CourseListViewModel
+            {
+                Courses=courses,
+                Input=input
+            };
+
+            return View(viewModel);
         }
         public async Task<IActionResult> Detail(int id)
         {

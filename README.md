@@ -1,5 +1,5 @@
 # MVCcore
-Corso Udemy MVC Core - WebHD_13-5 Model Binder personalizzato
-01.0032.2023
+Corso Udemy MVC Core - WebHD_13-7 Mantenimento dello stato
+02.03.2023
 
-Implementazione di un model binder personalizzato.
+Attraverso l'inserimento dello stato nella querystring.

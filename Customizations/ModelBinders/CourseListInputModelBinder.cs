@@ -14,6 +14,7 @@ namespace MyCourse.Customizations.ModelBinders
         }
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
+            
             // Recuperiamo i valori grazie ai value provider
             string search = bindingContext.ValueProvider.GetValue("Search").FirstValue;
             int  page = Convert.ToInt32( bindingContext.ValueProvider.GetValue("Page").FirstValue);
