@@ -10,26 +10,46 @@ namespace MyCourse.Models.InputModels
         public CourseListInputModel(string search, int page, string orderby, bool ascending, CoursesOptions coursesOption)
         {
             // Sanitizzazione
-            var orderOptions=coursesOption.Order;
-            if(!orderOptions.Allow.Contains(orderby))
+            var orderOptions = coursesOption.Order;
+            if (!orderOptions.Allow.Contains(orderby))
             {
-                orderby= orderOptions.By;
-                ascending=orderOptions.Ascending;
+                orderby = orderOptions.By;
+                ascending = orderOptions.Ascending;
             }
 
-            Search=search ?? "";
-            Page=Math.Max(1,page);
-            OrderBy=orderby;
-            Ascending=ascending;
+            Search = search ?? "";
+            Page = Math.Max(1, page);
+            OrderBy = orderby;
+            Ascending = ascending;
 
             Limit = coursesOption.PerPage;
-            Offset = (Page-1  )* Limit;
+            Offset = (Page - 1) * Limit;
         }
-        public string  Search { get; }
-        public int Page { get;}
-        public string  OrderBy { get;  }
-        public bool  Ascending { get;  }
-        public int Limit{get;}
-        public int Offset{get;}
+        public string Search { get; }
+        public int Page { get; }
+        public string OrderBy { get; }
+        public bool Ascending { get; }
+        public int Limit { get; }
+        public int Offset { get; }
+        public string Stato
+        {
+            get
+            {
+                return $"{Search};{Page};{OrderBy};{Ascending};{Limit},{Offset}";
+            }
+        }
+        public static CourseListInputModel Decode(string stato, CoursesOptions coursesOption)
+        {
+            if(stato==null)
+                return null;
+            string[] dati = stato.Split(';');
+            return new CourseListInputModel(
+                dati[0],
+                Convert.ToInt32(dati[1]),
+                dati[2],
+                Convert.ToBoolean(dati[3]),
+                coursesOption
+            );
+        } 
     }
 }

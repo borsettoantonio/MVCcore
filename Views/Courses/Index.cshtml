@@ -9,7 +9,8 @@
     </div>
     <div class="col-md-4 d-flex align-items-center">
         <form asp-controller="Courses" asp-action="Index" method="get">
-            @Html.HiddenFor(model => model.Input.OrderBy)
+            <input type="hidden" name="pippo" value="1" />
+            @Html.HiddenFor(model => model.Input.Stato)
             <div class="input-group margin-bottom-sm">
                 <input type="text" name="search" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
                     value="@Model.Input.Search" aria-describedby="search-button">
@@ -21,23 +22,55 @@
     </div>
 </div>
 
+<!--
+    Prova di lettura di un parametro hidden
+    e costruzione di un link con i dati del parametro
+    
+<script type="application/javascript">
+    function f2() {
+        var s = document.getElementsByName("Input.Stato")[0].value;
+        return "localhost:5180/Courses?pippo=" + s + "&search=chitarra";
+      
+    }
+
+</script>
+
+<script type="application/javascript">
+var stringa = "Visita";
+document.write(stringa.link("/Courses?pippo=1"));
+</script>
+
+<script type="application/javascript">
+function f3()
+{
+   location.href=f2();
+}
+</script>
+
+<br/>
+<a href="javascript:f2()">ciao</a>
+<br/>
+<a href="javascript:;" onclick="f3();">Link</a>
+<br/>
+-->
+
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-5"><a asp-route-orderby="Title"
             asp-route-ascending="@(Model.Input.OrderBy == "Title" ? !Model.Input.Ascending : true)"
-            asp-route-search="@Model.Input.Search">Titolo @if (Model.Input.OrderBy == "Title")
+            asp-route-Input.Stato="@Model.Input.Stato">Titolo @if (Model.Input.OrderBy == "Title")
             {
                 <i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>
             }</a> </div>
     <div class="col-md-2"><a asp-route-orderby="Rating"
             asp-route-ascending="@(Model.Input.OrderBy == "Rating" ? !Model.Input.Ascending : true)"
-            asp-route-search="@Model.Input.Search">Valutazione @if (Model.Input.OrderBy == "Rating")
+            asp-route-Input.Stato="@Model.Input.Stato">Valutazione @if (Model.Input.OrderBy == "Rating")
             {
                 <i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>
             }</a></div>
     <div class="col-md-2"><a asp-route-orderby="CurrentPrice"
             asp-route-ascending="@(Model.Input.OrderBy == "CurrentPrice" ? !Model.Input.Ascending : true)"
-            asp-route-search="@Model.Input.Search">Prezzo @if (Model.Input.OrderBy == "CurrentPrice")
+            asp-route-Input.Stato="@Model.Input.Stato">Prezzo @if (Model.Input.OrderBy == "CurrentPrice")
             {
                 <i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>
             }</a></div>
@@ -96,13 +129,13 @@
 <nav aria-label="Page navigation">
     <ul class="pagination d-flex justify-content-center mt-3">
         <li class="page-item active" aria-current="page">
-            <a class="page-link" asp-route-page="1">1 <span class="sr-only">(current)</span></a>
+            <a class="page-link" asp-route-page="1" asp-route-Input.Stato="@Model.Input.Stato">1 <span class="sr-only">(current)</span></a>
         </li>
         <li class="page-item">
-            <a class="page-link" asp-route-page="2">2</a>
+            <a class="page-link" asp-route-page="2" asp-route-Input.Stato="@Model.Input.Stato">2</a>
         </li>
         <li class="page-item">
-            <a class="page-link" asp-route-page="3">3</a>
+            <a class="page-link" asp-route-page="3" asp-route-Input.Stato="@Model.Input.Stato">3</a>
         </li>
     </ul>
 </nav>

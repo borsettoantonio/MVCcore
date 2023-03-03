@@ -14,13 +14,20 @@ namespace MyCourse.Customizations.ModelBinders
         }
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            
+            var st = CourseListInputModel.Decode(bindingContext.ValueProvider.GetValue("Input.Stato").FirstValue,coursesOptions.Value);
             // Recuperiamo i valori grazie ai value provider
             string search = bindingContext.ValueProvider.GetValue("Search").FirstValue;
             int  page = Convert.ToInt32( bindingContext.ValueProvider.GetValue("Page").FirstValue);
             string orderby = bindingContext.ValueProvider.GetValue("OrderBy").FirstValue;
             bool ascending = Convert.ToBoolean( bindingContext.ValueProvider.GetValue("Ascending").FirstValue);
-
+            if(st != null)
+            {
+                search= search ?? st.Search;
+                if(page ==  0) 
+                    page=st.Page;
+                orderby=orderby ?? st.OrderBy;
+            }
+            
             // Creiamo l'istanza del CourseListInputModel
             var inputModel = new CourseListInputModel(search,page,orderby,ascending, coursesOptions.Value);
 
