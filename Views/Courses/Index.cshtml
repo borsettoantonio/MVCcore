@@ -9,7 +9,6 @@
     </div>
     <div class="col-md-4 d-flex align-items-center">
         <form asp-controller="Courses" asp-action="Index" method="get">
-            <input type="hidden" name="pippo" value="1" />
             @Html.HiddenFor(model => model.Input.Stato)
             <div class="input-group margin-bottom-sm">
                 <input type="text" name="search" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
@@ -25,12 +24,12 @@
 <!--
     Prova di lettura di un parametro hidden
     e costruzione di un link con i dati del parametro
-    
+
 <script type="application/javascript">
     function f2() {
         var s = document.getElementsByName("Input.Stato")[0].value;
         return "localhost:5180/Courses?pippo=" + s + "&search=chitarra";
-      
+
     }
 
 </script>
@@ -77,7 +76,7 @@ function f3()
     <div class="col-md-2"></div>
 </div>
 
-@foreach (CourseViewModel course in Model.Courses)
+@foreach (CourseViewModel course in Model.Courses.Results)
 {
     <hr>
     <div class="row course">
@@ -126,17 +125,40 @@ function f3()
     </div>
 }
 
-<nav aria-label="Page navigation">
+@{
+    int totalPages = (int)Math.Ceiling(Model.Courses.TotalCount / (double)Model.Input.Limit);
+    int currentPage = Model.Input.Page;
+}
+<nav aria-label="Paginazione">
     <ul class="pagination d-flex justify-content-center mt-3">
-        <li class="page-item active" aria-current="page">
-            <a class="page-link" asp-route-page="1" asp-route-Input.Stato="@Model.Input.Stato">1 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" asp-route-page="2" asp-route-Input.Stato="@Model.Input.Stato">2</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" asp-route-page="3" asp-route-Input.Stato="@Model.Input.Stato">3</a>
-        </li>
+        @if (currentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-page="@(currentPage-1)" asp-route-Input.Stato="@Model.Input.Stato"><i class=  "fas fa-angle-left"></i></a>
+            </li>
+        }
+        @for (int p = Math.Max(1, currentPage - 4); p <= Math.Min(totalPages, currentPage + 4); p++)
+        {
+            if (p == currentPage)
+            {
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" asp-route-page="@p" asp-route-Input.Stato="@Model.Input.Stato">@p<span
+                            class="sr-only">(current)</span></a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-route-page="@p" asp-route-Input.Stato="@Model.Input.Stato">@p</a>
+                </li>
+            }
+        }
+        @if (currentPage < totalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-page="@(currentPage+1)" asp-route-Input.Stato="@Model.Input.Stato"><i class= "fas fa-angle-right"></i></a>
+            </li>
+        }
     </ul>
 </nav>
 

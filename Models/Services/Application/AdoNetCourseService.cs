@@ -90,7 +90,7 @@ namespace MyCourse.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
+        public async Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
             string orderby=model.OrderBy;
             if(model.OrderBy=="CurrentPrice")
@@ -99,7 +99,8 @@ namespace MyCourse.Models.Services.Application
             }
             string direction= model.Ascending ? "ASC" : "DESC";
 
-            FormattableString query = $"SELECT Id,Title,ImagePath,Author,Rating, FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency  FROM COURSES WHERE Title LIKE {"%" +  model.Search + "%"}  ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset} " ;          
+            FormattableString query = $@"SELECT Id,Title,ImagePath,Author,Rating, FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency  FROM COURSES WHERE Title LIKE {"%" +  model.Search + "%"}  ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset};
+             SELECT Count(*)  FROM COURSES WHERE Title LIKE {"%" +  model.Search + "%"} " ;          
             DataSet dataSet = await db.QueryAsync(query);
              var table = dataSet.Tables[0];
             /*
@@ -124,8 +125,13 @@ namespace MyCourse.Models.Services.Application
                   Enum.Parse<Currency>(Convert.ToString(course["FullPrice_Currency"])),
                   Convert.ToDecimal(course["FullPrice_Amount"])),
             }).ToList();
+            
+            ListViewModel<CourseViewModel> result = new ListViewModel<CourseViewModel>{
+                Results = lista,
+                TotalCount =Convert.ToInt32( dataSet.Tables[1].Rows[0][0])
+            };
 
-            return lista;
+            return result;
         }
     }
 
