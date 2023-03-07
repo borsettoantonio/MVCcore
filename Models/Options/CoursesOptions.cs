@@ -4,6 +4,7 @@ namespace MyCourse.Models.Options
     {
         public const string Courses = "Courses";
         public int PerPage { get; set; }
+        public int InHome { get; set; }
 
         public CoursesOrderOptions Order { get; set; }
         public int CacheDuration { get; set; }

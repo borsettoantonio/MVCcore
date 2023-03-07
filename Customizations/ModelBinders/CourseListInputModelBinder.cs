@@ -32,7 +32,7 @@ namespace MyCourse.Customizations.ModelBinders
             }
 
             // Creiamo l'istanza del CourseListInputModel
-            var inputModel = new CourseListInputModel(search, page, orderby, ascending, coursesOptions.Value);
+            var inputModel = new CourseListInputModel(search, page, orderby, ascending, coursesOptions.Value.PerPage,coursesOptions.Value);
 
             // Impostiamo il risultato per notificare che la creazione è avvenuta con successo
             bindingContext.Result = ModelBindingResult.Success(inputModel);

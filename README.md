@@ -1,6 +1,9 @@
 # MVCcore
-Corso Udemy MVC Core - WebHD_13-8 Paginazione
-06.03.2023
+Corso Udemy MVC Core - WebHD_13-9 Home page
+07.03.2023
 
-Lettura dal database del numero dei corsi. Per la paginazione.
+Presentazione della Home Page.
+
+Con un jumbotron Bootstrap.
+
 

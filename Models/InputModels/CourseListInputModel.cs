@@ -7,7 +7,7 @@ namespace MyCourse.Models.InputModels
     [ModelBinder(BinderType = typeof(CourseListInputModelBinder))]
     public class CourseListInputModel
     {
-        public CourseListInputModel(string search, int page, string orderby, bool ascending, CoursesOptions coursesOption)
+        public CourseListInputModel(string search, int page, string orderby, bool ascending, int limit,CoursesOptions coursesOption)
         {
             // Sanitizzazione
             var orderOptions = coursesOption.Order;
@@ -19,10 +19,10 @@ namespace MyCourse.Models.InputModels
 
             Search = search ?? "";
             Page = Math.Max(1, page);
+            Limit=Math.Max(1,limit);
             OrderBy = orderby;
             Ascending = ascending;
 
-            Limit = coursesOption.PerPage;
             Offset = (Page - 1) * Limit;
         }
         public string Search { get; }
@@ -48,6 +48,7 @@ namespace MyCourse.Models.InputModels
                 Convert.ToInt32(dati[1]),
                 dati[2],
                 Convert.ToBoolean(dati[3]),
+                1,
                 coursesOption
             );
         } 
