@@ -1,9 +1,6 @@
 # MVCcore
-Corso Udemy MVC Core - WebHD_14-1 Tag Helper
+Corso Udemy MVC Core - WebHD_14-2 View Component
 08.03.2023
 
-Generazione di Tag Helper:
-
-Rating, Price, OrderLink
-
+Generazione di View Component per la barra di paginazione
 
