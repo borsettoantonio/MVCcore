@@ -1,6 +1,6 @@
-# MVCcore
-Corso Udemy MVC Core - WebHD_14-2 View Component
-08.03.2023
+# MVCcore Corso Udemy MVC Core - WebHD_14-3 View Component /2
+13.03.2023
 
-Generazione di View Component per la barra di paginazione
+Accoppiamento debole del View Component per la barra di paginazione,
+con l'introduzione dell'interfaccia IPaginationInfo.
 

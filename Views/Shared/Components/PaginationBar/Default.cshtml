@@ -1,13 +1,14 @@
+@model IPaginationInfo
 @{
-    int totalPages = (int)Math.Ceiling(Model.Courses.TotalCount / (double)Model.Input.Limit);
-    int currentPage = Model.Input.Page;
+    int totalPages = (int)Math.Ceiling(Model.TotalResults / (double)Model.ResultsPerPge);
+    int currentPage = Model.CurrentPage;
 }
 <nav aria-label="Paginazione">
     <ul class="pagination d-flex justify-content-center mt-3">
         @if (currentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-page="@(currentPage-1)" asp-route-Input.Stato="@Model.Input.Stato"><i class=  "fas fa-angle-left"></i></a>
+                <a class="page-link" asp-route-page="@(currentPage-1)" asp-route-Stato="@Model.Stato"><i class=  "fas fa-angle-left"></i></a>
             </li>
         }
         @for (int p = Math.Max(1, currentPage - 4); p <= Math.Min(totalPages, currentPage + 4); p++)
@@ -15,21 +16,21 @@
             if (p == currentPage)
             {
                 <li class="page-item active" aria-current="page">
-                    <a class="page-link" asp-route-page="@p" asp-route-Input.Stato="@Model.Input.Stato">@p<span
+                    <a class="page-link" asp-route-page="@p" asp-route-Stato="@Model.Stato">@p<span
                             class="sr-only">(current)</span></a>
                 </li>
             }
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-route-page="@p" asp-route-Input.Stato="@Model.Input.Stato">@p</a>
+                    <a class="page-link" asp-route-page="@p" asp-route-Stato="@Model.Stato">@p</a>
                 </li>
             }
         }
         @if (currentPage < totalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-page="@(currentPage+1)" asp-route-Input.Stato="@Model.Input.Stato"><i class= "fas fa-angle-right"></i></a>
+                <a class="page-link" asp-route-page="@(currentPage+1)" asp-route-Stato="@Model.Stato"><i class= "fas fa-angle-right"></i></a>
             </li>
         }
     </ul>
