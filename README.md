@@ -1,6 +1,5 @@
-# MVCcore Corso Udemy MVC Core - WebHD_14-3 View Component /2
+# MVCcore Corso Udemy MVC Core - WebHD_14-4 Partial View 
 13.03.2023
 
-Accoppiamento debole del View Component per la barra di paginazione,
-con l'introduzione dell'interfaccia IPaginationInfo.
+Introduzione di una partial view per una line di descrizione di un corso.
 
