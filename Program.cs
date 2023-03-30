@@ -54,7 +54,7 @@ namespace CorsoMVCcore
             app.UseResponseCaching();
             //app.UseOutputCache();
 
-            // versine per Core 7
+            // versione per Core 7
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
