@@ -35,10 +35,15 @@ namespace CorsoMVCcore
             builder.Services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
             builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
 
+            builder.Services.AddTransient<IImagePersister, InsecureImagePersister>();
+
+
             // Opzioni di configurazioine
             builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection(CoursesOptions.Courses));
             builder.Services.Configure<MemoryCacheOptions>(builder.Configuration.GetSection("MemoryCache"));
-
+            
+           
+            
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

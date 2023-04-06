@@ -4,7 +4,7 @@ namespace MyCourse.Models.ValueObjects{
 
 public record Money
 {
-    public Money(Enums.Currency eUR) : this(Currency.EUR, 0.00m)
+    public Money() : this(Currency.EUR, 0.00m)
     {
     }
     public Money(Currency currency, decimal amount)

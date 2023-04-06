@@ -20,10 +20,12 @@ namespace MyCourse.Models.Services.Application
         private readonly IDatabaseAccessor db;
         private readonly IConfiguration coursesOptions;
         IOptions<CoursesOptions> options;
+        private readonly IImagePersister imagePersister;
 
         public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options,
-                                    ILogger<AdoNetCourseService> logger)
+                                    ILogger<AdoNetCourseService> logger, IImagePersister imagePersister)
         {
+            this.imagePersister=imagePersister;
             this.db = db;
             this.coursesOptions = coursesOptions;
             this.options = options;
@@ -181,9 +183,63 @@ namespace MyCourse.Models.Services.Application
             }
             catch (SqliteException ex) when (ex.SqliteErrorCode == 19)
             {
-                throw new CourseTitleUnavailableException(title,ex);
+                throw new CourseTitleUnavailableException(title, ex);
             }
         }
-        }
+        public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        {
+            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}";
 
+            DataSet dataSet = await db.QueryAsync(query);
+
+            var courseTable = dataSet.Tables[0];
+            if (courseTable.Rows.Count != 1)
+            {
+                logger.LogWarning("Course {id} not found", id);
+                throw new CourseNotFoundException(id);
+            }
+            var courseRow = courseTable.Rows[0];
+            var courseEditInputModel = CourseEditInputModel.FromDataRow(courseRow);
+            return courseEditInputModel;
+        }
+        public async Task<CourseDetailModel> EditCourseAsync(CourseEditInputModel inputModel)
+        {
+            DataSet dataSet = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Id={inputModel.Id}");
+            if (Convert.ToInt32(dataSet.Tables[0].Rows[0][0]) == 0)
+            {
+                throw new CourseNotFoundException(inputModel.Id);
+            }
+
+            try
+            {
+                dataSet = await db.QueryAsync($"UPDATE Courses SET Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id={inputModel.Id}");
+            }
+            catch (SqliteException exc) when (exc.SqliteErrorCode == 19)
+            {
+                throw new CourseTitleUnavailableException(inputModel.Title, exc);
+            }
+
+                        if (inputModel.Image != null)
+                        {
+                            try {
+                                string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+                                dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath={imagePath} WHERE Id={inputModel.Id}");
+                            }
+                            catch(Exception exc)
+                            {
+                                //throw new CourseImageInvalidException(inputModel.Id, exc);
+                            }
+                        }
+          
+            CourseDetailModel course = await GetCourseAsync(inputModel.Id);
+            return course;
+        }
+        public async Task<bool> IsTitleAvailableAsync(string title, int id)
+        {
+            DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND id<>{id}");
+            bool titleAvailable = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
+            return titleAvailable;
+        }
     }
+
+}
