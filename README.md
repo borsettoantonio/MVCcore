@@ -1,5 +1,7 @@
-# MVCcore Corso Udemy MVC Core - WebHD_16-12 Modifica corso
-06.04.2023
+# MVCcore Corso Udemy MVC Core - WebHD_16-13 Gestione input/output di dati decimal
+07.04.2023
 
-Form di modifica di un corso,
-con inserimento di una immagine senza uteriori controlli.
+TagHelper personalizzato per cambiare il formato di un numero da inviare al browser.
+
+ModelBinder personalizzato per cambiare il formato di un umero ricevuto da browser.
+

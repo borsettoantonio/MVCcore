@@ -1,3 +1,4 @@
+using MyCourse.Customizations.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
@@ -30,6 +31,9 @@ namespace CorsoMVCcore
                 // oppure
                 builder.Configuration.Bind("ResponseCache:Home",homeProfile);
                 options.CacheProfiles.Add("Home",homeProfile);
+
+                options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+
             });
             builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
             builder.Services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
@@ -41,8 +45,6 @@ namespace CorsoMVCcore
             // Opzioni di configurazioine
             builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection(CoursesOptions.Courses));
             builder.Services.Configure<MemoryCacheOptions>(builder.Configuration.GetSection("MemoryCache"));
-            
-           
             
             var app = builder.Build();
 
@@ -56,6 +58,15 @@ namespace CorsoMVCcore
             }
 
             app.UseStaticFiles();
+
+            //Nel caso volessi impostare una Culture specifica...
+            /*var appCulture = CultureInfo.InvariantCulture;
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(appCulture),
+                SupportedCultures = new[] { appCulture }
+            });*/
+
             app.UseResponseCaching();
             //app.UseOutputCache();
 
