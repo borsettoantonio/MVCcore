@@ -1,7 +1,14 @@
-# MVCcore Corso Udemy MVC Core - WebHD_16-13 Gestione input/output di dati decimal
-07.04.2023
+# MVCcore Corso Udemy MVC Core - WebHD_16-14 Gestione input/output con editor evoluto
+10.04.2023
 
-TagHelper personalizzato per cambiare il formato di un numero da inviare al browser.
+Uso di Summernote editor.
 
-ModelBinder personalizzato per cambiare il formato di un umero ricevuto da browser.
+In _Summernote.cshtml ho aggiunto $(document).ready(function() {...}
+prima della inizializzazioe di summernote, perchè altrimenti non funziona
+in quanto viene chiamata prima del completamento del load della pagina.
 
+Uso di Html.Raw(...) in Detail.cshtml per stampare una stringa senza l'encoding html,
+in modo da poter rendere anche la formattazione html presente nella stringa.
+
+La modifica di un corso non funziona benissimo perchè occorre inserire sempre
+un corso, anche se uno è già presente. 
