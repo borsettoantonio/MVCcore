@@ -1,14 +1,35 @@
-# MVCcore Corso Udemy MVC Core - WebHD_16-14 Gestione input/output con editor evoluto
-10.04.2023
+# MVCcore Corso Udemy MVC Core - WebHD_16-15 Sanitizzazione dell'input
+16.04.2023
 
-Uso di Summernote editor.
+Sanitizzazione dell'input contenente del codice Html, usando un tag helper,
+HtmlSanitizeTagHelper attivato dalla presenza di un particolare attributo.
 
-In _Summernote.cshtml ho aggiunto $(document).ready(function() {...}
-prima della inizializzazioe di summernote, perchè altrimenti non funziona
-in quanto viene chiamata prima del completamento del load della pagina.
+Uso della libreria HtmlSanitizer (presa da NuGet) che toglie i tag non voluti
+dall'html da sanitizzare.
 
-Uso di Html.Raw(...) in Detail.cshtml per stampare una stringa senza l'encoding html,
-in modo da poter rendere anche la formattazione html presente nella stringa.
+E suo utilizzo sia in Detail.cshtml che in Edit.cshtml.
 
-La modifica di un corso non funziona benissimo perchè occorre inserire sempre
-un corso, anche se uno è già presente. 
+La classe video-container applicata dal tag helper nel metodo ProcessIFrames 
+di post-processing permette di ridimensionare il video al ridimensionamento
+della finestra.
+
+Ho avuto dei problemi nella view Edit.cshtml a far convivere
+sulla textarea "Description" l'attributo asp-for ( per collegare la textarea 
+ai controlli di validazione), 
+con l'attributo data-summernote (per collegare la textarea all'editor summernote)
+e con l'attributo html-sanitize (per sanitizzare il campo che contiene html).
+
+Bisogna togliere asp-for="Decription" e aggiundere 
+
+id="Description"  name="Description"
+
+Su CourseEditInputModel.cs ho dovuto mettere l'attributo:
+
+[MinLength(21, ErrorMessage = "La descrizione dev'essere di almeno 10 caratteri")]
+
+sul campo Description, perche anche con la text area vuota arrivano 11 caratteri
+e quindi ho dovuto mettere 21 come lunghezza minima per avere al minimo 10 caratteri
+inseriti dall'utente.
+
+Devo provare a fare il controllo dell'input prima di memorizzare al textarea,
+probabilmente tolgo tanti problemi.

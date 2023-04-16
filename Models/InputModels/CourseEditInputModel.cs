@@ -24,7 +24,7 @@ namespace MyCourse.Models.InputModels
          Display(Name = "Titolo")]
         public string Title { get; set; }
         
-        [MinLength(10, ErrorMessage = "La descrizione dev'essere di almeno {1} caratteri"),
+        [MinLength(21, ErrorMessage = "La descrizione dev'essere di almeno 10 caratteri"),
          MaxLength(4000, ErrorMessage = "La descrizione dev'essere di massimo {1} caratteri"),
          Display(Name = "Descrizione")]
         public string Description { get; set; }
