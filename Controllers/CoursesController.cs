@@ -71,6 +71,8 @@ namespace MyCourse.Controllers
         {
             if (ModelState.IsValid)
             {
+                // sanitizzazione del contenuto HTML della textarea Descrizione
+                inputModel.Sanitizza();
                 try
                 {
                     CourseDetailModel course = await courseService.EditCourseAsync(inputModel);

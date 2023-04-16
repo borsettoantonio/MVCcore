@@ -24,8 +24,8 @@
 
                 <div class="form-group" >
                     <label asp-for="Description"></label>
-                    <textarea id="Description" name="Description" class="form-control" data-summernote rows="18">
-                         <p html-sanitize>@Model.Description</p>
+                    <textarea asp-for="Description" class="form-control" data-summernote rows="18">
+                         
                     </textarea>
                     <span asp-validation-for="Description"></span>
                 </div>

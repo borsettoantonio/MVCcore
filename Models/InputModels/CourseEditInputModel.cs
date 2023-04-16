@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using AngleSharp.Html.Dom;
+using Ganss.Xss;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyCourse.Controllers;
@@ -23,12 +25,12 @@ namespace MyCourse.Models.InputModels
          Remote(action: nameof(CoursesController.IsTitleAvailable), controller: "Courses", ErrorMessage = "Il titolo esiste già", AdditionalFields = "Id"),
          Display(Name = "Titolo")]
         public string Title { get; set; }
-        
+
         [MinLength(21, ErrorMessage = "La descrizione dev'essere di almeno 10 caratteri"),
          MaxLength(4000, ErrorMessage = "La descrizione dev'essere di massimo {1} caratteri"),
          Display(Name = "Descrizione")]
         public string Description { get; set; }
-        
+
         [Display(Name = "Immagine rappresentativa")]
         public string ImagePath { get; set; }
 
@@ -52,11 +54,11 @@ namespace MyCourse.Models.InputModels
         {
             if (FullPrice.Currency != CurrentPrice.Currency)
             {
-                yield return new ValidationResult("Il prezzo intero deve avere la stessa valuta del prezzo corrente", new [] { nameof(FullPrice) });
+                yield return new ValidationResult("Il prezzo intero deve avere la stessa valuta del prezzo corrente", new[] { nameof(FullPrice) });
             }
             else if (FullPrice.Amount < CurrentPrice.Amount)
             {
-                yield return new ValidationResult("Il prezzo intero non può essere inferiore al prezzo corrente", new [] { nameof(FullPrice) });
+                yield return new ValidationResult("Il prezzo intero non può essere inferiore al prezzo corrente", new[] { nameof(FullPrice) });
             }
         }
 
@@ -79,6 +81,61 @@ namespace MyCourse.Models.InputModels
                 Id = Convert.ToInt32(courseRow["Id"])
             };
             return courseEditInputModel;
+        }
+
+        // metodo per controllare l'HTML della textarea Description
+        public void Sanitizza()
+        {
+            var sanitizer = CreateSanitizer();
+            Description = sanitizer.Sanitize(Description);
+        }
+        private static HtmlSanitizer CreateSanitizer()
+        {
+            var sanitizer = new HtmlSanitizer();
+
+            //Tag consentiti
+            sanitizer.AllowedTags.Clear();
+            sanitizer.AllowedTags.Add("b");
+            sanitizer.AllowedTags.Add("i");
+            sanitizer.AllowedTags.Add("p");
+            sanitizer.AllowedTags.Add("br");
+            sanitizer.AllowedTags.Add("ul");
+            sanitizer.AllowedTags.Add("ol");
+            sanitizer.AllowedTags.Add("li");
+            sanitizer.AllowedTags.Add("span");
+            sanitizer.AllowedTags.Add("iframe");
+
+            //Attributi consentiti
+            sanitizer.AllowedAttributes.Clear();
+            sanitizer.AllowedAttributes.Add("src");
+            sanitizer.AllowDataAttributes = false;
+
+            //Stili consentiti
+            sanitizer.AllowedCssProperties.Clear();
+
+            sanitizer.FilterUrl += FilterUrl;
+            sanitizer.PostProcessNode += ProcessIFrames;
+
+            return sanitizer;
+        }
+        private static void FilterUrl(object sender, FilterUrlEventArgs filterUrlEventArgs)
+        {
+            if (!filterUrlEventArgs.OriginalUrl.StartsWith("//www.youtube.com/") && !filterUrlEventArgs.OriginalUrl.StartsWith("https://www.youtube.com/"))
+            {
+                filterUrlEventArgs.SanitizedUrl = null;
+            }
+        }
+        
+        private static void ProcessIFrames(object sender, PostProcessNodeEventArgs postProcessNodeEventArgs)
+        {
+            var iframe = postProcessNodeEventArgs.Node as IHtmlInlineFrameElement;
+            if (iframe == null) {
+                return;
+            }
+            var container = postProcessNodeEventArgs.Document.CreateElement("span");
+            container.ClassName = "video-container";
+            container.AppendChild(iframe.Clone(true));
+            postProcessNodeEventArgs.ReplacementNodes.Add(container);
         }
     }
 }
