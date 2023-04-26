@@ -25,7 +25,7 @@ namespace MyCourse.Models.Services.Application
         public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options,
                                     ILogger<AdoNetCourseService> logger, IImagePersister imagePersister)
         {
-            this.imagePersister=imagePersister;
+            this.imagePersister = imagePersister;
             this.db = db;
             this.coursesOptions = coursesOptions;
             this.options = options;
@@ -219,18 +219,19 @@ namespace MyCourse.Models.Services.Application
                 throw new CourseTitleUnavailableException(inputModel.Title, exc);
             }
 
-                        if (inputModel.Image != null)
-                        {
-                            try {
-                                string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
-                                dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath={imagePath} WHERE Id={inputModel.Id}");
-                            }
-                            catch(Exception exc)
-                            {
-                                //throw new CourseImageInvalidException(inputModel.Id, exc);
-                            }
-                        }
-          
+            if (inputModel.Image != null)
+            {
+                try
+                {
+                    string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+                    dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath={imagePath} WHERE Id={inputModel.Id}");
+                }
+                catch (Exception exc)
+                {
+                    //throw new CourseImageInvalidException(inputModel.Id, exc);
+                }
+            }
+
             CourseDetailModel course = await GetCourseAsync(inputModel.Id);
             return course;
         }

@@ -48,7 +48,7 @@ namespace MyCourse.Models.InputModels
         public Money CurrentPrice { get; set; }
 
         [Display(Name = "Nuova immagine...  ")]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

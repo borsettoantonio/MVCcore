@@ -66,5 +66,10 @@ function f3()
     <partial name="Courses/_CourseLine" model="@course"></partial>
 }
 
-<vc:pagination-bar model="@Model"></vc:pagination-bar>
-
+<vc:pagination-bar model="@Model as IPaginationInfo"></vc:pagination-bar>
+<div>
+    @await Component.InvokeAsync("PaginationBar",
+                     new { 
+                         model=@Model  }
+                     )
+</div>
