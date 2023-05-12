@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace CorsoMVCcore
 {
@@ -40,11 +41,14 @@ namespace CorsoMVCcore
             builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
 
             builder.Services.AddTransient<IImagePersister, InsecureImagePersister>();
+            builder.Services.AddSingleton<IImagePersister, MagickNetImagePersister>();
 
 
             // Opzioni di configurazioine
             builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection(CoursesOptions.Courses));
             builder.Services.Configure<MemoryCacheOptions>(builder.Configuration.GetSection("MemoryCache"));
+            builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+
             
             var app = builder.Build();
 

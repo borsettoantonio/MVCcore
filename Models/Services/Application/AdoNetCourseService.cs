@@ -228,7 +228,7 @@ namespace MyCourse.Models.Services.Application
                 }
                 catch (Exception exc)
                 {
-                    //throw new CourseImageInvalidException(inputModel.Id, exc);
+                    throw new CourseImageInvalidException(inputModel.Id, exc);
                 }
             }
 

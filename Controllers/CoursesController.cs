@@ -3,6 +3,7 @@ using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Exceptions.Application;
+using MyCourse.Models.Exceptions;
 
 namespace MyCourse.Controllers
 {
@@ -80,12 +81,11 @@ namespace MyCourse.Controllers
                     return RedirectToAction(nameof(Detail), new { id = inputModel.Id });
                 }
               
-                /*
                 catch (CourseImageInvalidException)
                 {
                     ModelState.AddModelError(nameof(CourseEditInputModel.Image), "L'immagine selezionata non è valida");
                 }
-                */
+          
                 catch (CourseTitleUnavailableException)
                 {
                     ModelState.AddModelError(nameof(CourseEditInputModel.Title), "Questo titolo già esiste");
