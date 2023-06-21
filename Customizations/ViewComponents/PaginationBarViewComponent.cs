@@ -9,6 +9,5 @@ namespace MyCourse.Customizations.ViewComponents
         {
             return View(model);
         }
-
     }
 }

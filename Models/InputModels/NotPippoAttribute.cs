@@ -9,7 +9,7 @@ namespace Models.InputModels
             if (value == null || ((string)value).ToUpper() != "PIPPO" )
                 return ValidationResult.Success;
             else
-                return new ValidationResult(ErrorMessage, new[] { valCtx.MemberName });
+                return new ValidationResult(ErrorMessage, new[] { valCtx.MemberName! });
         }
     }
 }
@@ -17,5 +17,5 @@ namespace Models.InputModels
 /*
 Con ValidationContext.GetService(typeof(nome_servizio)) as nome_servizio
 si possono ottenere i servizi che non sono disponibili qui usando
-la dependency ijection
+la dependency injection
 */

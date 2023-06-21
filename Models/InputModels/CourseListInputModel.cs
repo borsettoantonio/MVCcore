@@ -35,7 +35,7 @@ namespace MyCourse.Models.InputModels
         {
             get
             {
-                return $"{Search};{Page};{OrderBy};{Ascending};{Limit},{Offset}";
+                return $"{Search};{Page};{OrderBy};{Ascending};{Limit};{Offset}";
             }
         }
         public static CourseListInputModel Decode(string stato, CoursesOptions coursesOption)

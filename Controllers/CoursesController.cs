@@ -28,7 +28,7 @@ namespace MyCourse.Controllers
 
             return View(viewModel);
         }
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Detail(int idCliente,int id)
         {
             CourseDetailModel viewModel = await courseService.GetCourseAsync(id);
             return View(viewModel);

@@ -55,7 +55,7 @@ function f3()
 
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-5"><order-link order-by="Title" Input="@Model.Input">Titolo</order-link></div>
+    <div class="col-md-5"><order-link asp-controller="Home" asp-action="Create"  order-by="Title" Input="@Model.Input">Titolo</order-link></div>
     <div class="col-md-2"><order-link order-by="Rating" Input="@Model.Input">Valutazione</order-link></div>
     <div class="col-md-2"><order-link order-by="CurrentPrice" Input="@Model.Input">Prezzo</order-link></div>
     <div class="col-md-2"></div>
@@ -66,7 +66,11 @@ function f3()
     <partial name="Courses/_CourseLine" model="@course"></partial>
 }
 
+<!--
+    // questo non funziona in VS Code
 <vc:pagination-bar model="@Model as IPaginationInfo"></vc:pagination-bar>
+-->
+
 <div>
     @await Component.InvokeAsync("PaginationBar",
                      new { 
