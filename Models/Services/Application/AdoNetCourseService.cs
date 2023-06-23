@@ -10,7 +10,7 @@ using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using Microsoft.Data.Sqlite;
 using MyCourse.Models.Exceptions.Application;
-
+using Microsoft.AspNetCore.Http;
 
 namespace MyCourse.Models.Services.Application
 {
@@ -21,15 +21,18 @@ namespace MyCourse.Models.Services.Application
         private readonly IConfiguration coursesOptions;
         IOptions<CoursesOptions> options;
         private readonly IImagePersister imagePersister;
+        private readonly IHttpContextAccessor httpCtx;
 
         public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options,
-                                    ILogger<AdoNetCourseService> logger, IImagePersister imagePersister)
+                                    ILogger<AdoNetCourseService> logger, IImagePersister imagePersister,
+                                    IHttpContextAccessor httpCtx)
         {
             this.imagePersister = imagePersister;
             this.db = db;
             this.coursesOptions = coursesOptions;
             this.options = options;
             this.logger = logger;
+            this.httpCtx = httpCtx;
         }
 
         public async Task<CourseDetailModel> GetCourseAsync(int id)
@@ -170,7 +173,7 @@ namespace MyCourse.Models.Services.Application
         public async Task<CourseDetailModel> CreateCourseAsysnc(CourseCreateInputModel inputModel)
         {
             string title = inputModel.Title;
-            string author = "Mario rossi";
+            string author = httpCtx.HttpContext.User.FindFirst("FullName").Value;
 
             try
             {

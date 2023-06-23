@@ -7,6 +7,7 @@ using MyCourse.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Identity;
 using MyCourse.Models.Entities;
+using MyCourse.Customizations.Identity;
 
 namespace CorsoMVCcore
 {
@@ -47,12 +48,14 @@ namespace CorsoMVCcore
 
             // Identity Service
             // ApplicationUser deve essere il tipo che descrive l'utente
-            var identityBuilder = builder.Services.AddDefaultIdentity<ApplicationUser>();
+            var identityBuilder = builder.Services.AddDefaultIdentity<ApplicationUser>(option =>{
+                    option.Password.RequireDigit=true;
+                    option.Password.RequiredLength=8;
+            });
             //Imposta l'AdoNetUserStore come servizio di persistenza per Identity
-            identityBuilder.AddUserStore<AdoNetUserStore>();
+            identityBuilder.AddUserStore<AdoNetUserStore>().AddClaimsPrincipalFactory<CustomClaimsPrincipalFactory>();
 
             builder.Services.AddRazorPages();
-
 
             // Opzioni di configurazioine
             builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection(CoursesOptions.Courses));

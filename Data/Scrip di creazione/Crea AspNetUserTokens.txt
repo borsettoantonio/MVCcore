@@ -1,0 +1,11 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "AspNetUserTokens" (
+    "UserId" TEXT NOT NULL,
+    "LoginProvider" TEXT NOT NULL,
+    "Name" TEXT NOT NULL,
+    "Value" TEXT NULL,
+    CONSTRAINT "PK_AspNetUserTokens" PRIMARY KEY ("UserId", "LoginProvider", "Name"),
+    CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+COMMIT;

@@ -10,14 +10,17 @@ namespace MyCourse.Controllers
     public class CoursesController : Controller
     {
         private readonly ICourseService courseService;
-        public CoursesController(ICachedCourseService courseService)
+        private readonly IHttpContextAccessor ctx;
+        public CoursesController(ICachedCourseService courseService, IHttpContextAccessor ctx)
         {
             this.courseService = courseService;
+            this.ctx = ctx;
         }
 
         [ResponseCache(CacheProfileName = "Home")]
         public async Task<IActionResult> Index(CourseListInputModel input)
         {
+            ViewData["Title"] = ctx.HttpContext.Request.Method;
             ListViewModel<CourseViewModel> courses = await courseService.GetCoursesAsync(input);
             ViewData["Title"] = "Catalogo dei corsi";
             CourseListViewModel viewModel = new CourseListViewModel

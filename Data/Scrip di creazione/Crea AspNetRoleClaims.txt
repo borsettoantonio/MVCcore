@@ -1,0 +1,10 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "AspNetRoleClaims" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_AspNetRoleClaims" PRIMARY KEY AUTOINCREMENT,
+    "RoleId" TEXT NOT NULL,
+    "ClaimType" TEXT NULL,
+    "ClaimValue" TEXT NULL,
+    CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE
+);
+COMMIT;

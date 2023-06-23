@@ -1,0 +1,5 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE AspNetUsers (Id TEXT NOT NULL CONSTRAINT PK_AspNetUsers PRIMARY KEY, UserName TEXT, NormalizedUserName TEXT, Email TEXT, NormalizedEmail TEXT, EmailConfirmed INTEGER NOT NULL, PasswordHash TEXT, SecurityStamp TEXT, ConcurrencyStamp TEXT, PhoneNumber TEXT, PhoneNumberConfirmed INTEGER NOT NULL, TwoFactorEnabled INTEGER NOT NULL, LockoutEnd TEXT, LockoutEnabled INTEGER NOT NULL, AccessFailedCount INTEGER NOT NULL, "FullName" TEXT NULL);
+
+COMMIT;
