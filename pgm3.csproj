@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlSanitizer" Version="8.0.645" />
+    <PackageReference Include="MailKit" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.7" />
     <PackageReference Include="microsoft.data.sqlite" Version="7.0.2" />

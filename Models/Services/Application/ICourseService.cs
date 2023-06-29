@@ -13,5 +13,6 @@ namespace MyCourse.Models.Services.Application
         Task<CourseEditInputModel> GetCourseForEditingAsync(int id);
         Task<CourseDetailModel> EditCourseAsync(CourseEditInputModel inputModel);
         Task<bool> IsTitleAvailableAsync(string title, int excludeId);
+        Task SendQuestionToCourseAuthorAsync(int id, string question);
     }
 }

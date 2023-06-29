@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Identity;
 using MyCourse.Models.Entities;
 using MyCourse.Customizations.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace CorsoMVCcore
 {
@@ -15,7 +18,18 @@ namespace CorsoMVCcore
     {
         public static void Main(string[] args)
         {
+            AuthorizationPolicyBuilder policyBuilder = new();
+            AuthorizationPolicy policy = policyBuilder.RequireAuthenticatedUser().Build();
+            AuthorizeFilter filter = new(policy);
+
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            // builder.Services.AddControllersWithViews(options =>
+            // {
+            //     options.Filters.Add(filter);
+            // });
+
             builder.Services.AddResponseCaching();
             //builder.Services.AddOutputCache();
 
@@ -37,20 +51,23 @@ namespace CorsoMVCcore
                 options.CacheProfiles.Add("Home", homeProfile);
 
                 options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
-
             });
+
             builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
             builder.Services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
             builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
 
             builder.Services.AddTransient<IImagePersister, InsecureImagePersister>();
             builder.Services.AddSingleton<IImagePersister, MagickNetImagePersister>();
+            builder.Services.AddSingleton<IEmailSender, MailKitEmailSender>();
+            builder.Services.AddSingleton<IEmailClient, MailKitEmailSender>();
 
             // Identity Service
             // ApplicationUser deve essere il tipo che descrive l'utente
-            var identityBuilder = builder.Services.AddDefaultIdentity<ApplicationUser>(option =>{
-                    option.Password.RequireDigit=true;
-                    option.Password.RequiredLength=8;
+            var identityBuilder = builder.Services.AddDefaultIdentity<ApplicationUser>(option =>
+            {
+                option.Password.RequireDigit = true;
+                option.Password.RequiredLength = 8;
             });
             //Imposta l'AdoNetUserStore come servizio di persistenza per Identity
             identityBuilder.AddUserStore<AdoNetUserStore>().AddClaimsPrincipalFactory<CustomClaimsPrincipalFactory>();
@@ -61,7 +78,7 @@ namespace CorsoMVCcore
             builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection(CoursesOptions.Courses));
             builder.Services.Configure<MemoryCacheOptions>(builder.Configuration.GetSection("MemoryCache"));
             builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
-
+            builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 
             var app = builder.Build();
 

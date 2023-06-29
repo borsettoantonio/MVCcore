@@ -75,5 +75,11 @@ namespace MyCourse.Models.Services.Application
             memoryCache.Remove($"Course{inputModel.Id}");
             return viewModel;
         }
+
+        public Task SendQuestionToCourseAuthorAsync(int courseId, string question)
+    {
+        return courseService.SendQuestionToCourseAuthorAsync(courseId, question);
+    }
+
     }
 } 
