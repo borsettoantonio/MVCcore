@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 //using AspNetCore.ReCaptcha;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyCourse.Models.Services.Application;
-using MyCourse.Models.ViewModels;
+using pgm3.Models.Services.Application.Courses;
+using pgm3.Models.ViewModels.Courses;
 
 namespace MyCourse.Pages;
 
@@ -31,7 +31,7 @@ public class ContactModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPostAsync(int id, [FromServices] ICourseService courseService)
+    public async Task<IActionResult> OnPostAsync(int id, [FromServices] ICourseService courseService, string prova)
     {
         if (ModelState.IsValid)
         {

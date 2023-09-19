@@ -5,16 +5,19 @@ using System.Linq;
 using MyCourse.Models.ValueObjects;
 using MyCourse.Models.Enums;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using MyCourse.Models.Options;
-using MyCourse.Models.Exceptions;
+using pgm3.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using Microsoft.Data.Sqlite;
-using MyCourse.Models.Exceptions.Application;
-using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Ganss.Xss;
+using pgm3.Models.ViewModels.Courses;
+using pgm3.Models.ViewModels.Lessons;
+using pgm3.Models.Exceptions.Infrastructure;
+using pgm3.Models.Exceptions.Application;
 
-namespace MyCourse.Models.Services.Application
+namespace pgm3.Models.Services.Application.Courses
 {
     public class AdoNetCourseService : ICourseService
     {
@@ -28,7 +31,7 @@ namespace MyCourse.Models.Services.Application
 
         public AdoNetCourseService(IDatabaseAccessor db, IConfiguration coursesOptions, IOptions<CoursesOptions> options,
                                     ILogger<AdoNetCourseService> logger, IImagePersister imagePersister,
-                                    IHttpContextAccessor httpCtx,IEmailClient emailClient)
+                                    IHttpContextAccessor httpCtx, IEmailClient emailClient)
         {
             this.imagePersister = imagePersister;
             this.db = db;
@@ -250,54 +253,54 @@ namespace MyCourse.Models.Services.Application
 
         public async Task SendQuestionToCourseAuthorAsync(int id, string question)
         {
-           // Recupero le informazioni del corso
-        FormattableString query = $@"SELECT Title, Email FROM Courses WHERE Courses.Id={id}";
-        DataSet dataSet = await db.QueryAsync(query);
+            // Recupero le informazioni del corso
+            FormattableString query = $@"SELECT Title, Email FROM Courses WHERE Courses.Id={id}";
+            DataSet dataSet = await db.QueryAsync(query);
 
-        if (dataSet.Tables[0].Rows.Count == 0)
-        {
-            logger.LogWarning("Course {id} not found", id);
-            throw new CourseNotFoundException(id);
-        }
+            if (dataSet.Tables[0].Rows.Count == 0)
+            {
+                logger.LogWarning("Course {id} not found", id);
+                throw new CourseNotFoundException(id);
+            }
 
-        string courseTitle = Convert.ToString(dataSet.Tables[0].Rows[0]["Title"]);
-        string courseEmail = Convert.ToString(dataSet.Tables[0].Rows[0]["Email"]);
+            string courseTitle = Convert.ToString(dataSet.Tables[0].Rows[0]["Title"]);
+            string courseEmail = Convert.ToString(dataSet.Tables[0].Rows[0]["Email"]);
 
-        // Recupero le informazioni dell'utente che vuole inviare la domanda
-        string userFullName;
-        string userEmail;
+            // Recupero le informazioni dell'utente che vuole inviare la domanda
+            string userFullName;
+            string userEmail;
 
-        try
-        {
-            userFullName = httpCtx.HttpContext.User.FindFirst("FullName").Value;
-            userEmail = httpCtx.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
-        }
-        catch (NullReferenceException)
-        {
-            throw new UserUnknownException();
-        }
+            try
+            {
+                userFullName = httpCtx.HttpContext.User.FindFirst("FullName").Value;
+                userEmail = httpCtx.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+            }
+            catch (NullReferenceException)
+            {
+                throw new UserUnknownException();
+            }
 
-        // Sanitizzo la domanda dell'utente
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedTags.Clear();
-        question = sanitizer.Sanitize(question);
-        
+            // Sanitizzo la domanda dell'utente
+            var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedTags.Clear();
+            question = sanitizer.Sanitize(question);
 
-        // Compongo il testo della domanda
-        string subject = $@"Domanda per il tuo corso ""{courseTitle}""";
-        string message = $@"<p>L'utente {userFullName} (<a href=""{userEmail}"">{userEmail}</a>)
+
+            // Compongo il testo della domanda
+            string subject = $@"Domanda per il tuo corso ""{courseTitle}""";
+            string message = $@"<p>L'utente {userFullName} (<a href=""{userEmail}"">{userEmail}</a>)
                                 ti ha inviato la seguente domanda:</p>
                                 <p>{question}</p>";
 
-        // Invio la domanda
-        try
-        {
-            await emailClient.SendEmailAsync(courseEmail, userEmail, subject, message);
-        }
-        catch
-        {
-            throw new SendException();
-        }
+            // Invio la domanda
+            try
+            {
+                await emailClient.SendEmailAsync(courseEmail, userEmail, subject, message);
+            }
+            catch
+            {
+                throw new SendException();
+            }
         }
     }
 

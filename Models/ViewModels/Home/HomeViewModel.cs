@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using pgm3.Models.ViewModels.Courses;
 
-namespace MyCourse.Models.ViewModels
+namespace pgm3.Models.ViewModels.Home
 {
     public class HomeViewModel : CourseViewModel
     {

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models/Services/Application/CourseService.cs" />
+    <Compile Remove="Models/Services/Application/Courses/CourseService.cs" />
    </ItemGroup>
 
   <ItemGroup>

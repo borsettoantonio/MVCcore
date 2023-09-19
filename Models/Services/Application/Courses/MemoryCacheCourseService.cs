@@ -3,8 +3,9 @@ using Microsoft.Extensions.Options;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.ViewModels;
+using pgm3.Models.ViewModels.Courses;
 
-namespace MyCourse.Models.Services.Application
+namespace pgm3.Models.Services.Application.Courses
 {
     public class MemoryCacheCourseService : ICachedCourseService
     {
@@ -36,7 +37,7 @@ namespace MyCourse.Models.Services.Application
                  return courseService.GetCoursesAsync(model);
              })!;
         }
-        public  Task<List<CourseViewModel>> GetBestRatingCoursesAsync()
+        public Task<List<CourseViewModel>> GetBestRatingCoursesAsync()
         {
             return memoryCache.GetOrCreateAsync($"BestRatingCourses", cacheEntry =>
             {
@@ -45,7 +46,7 @@ namespace MyCourse.Models.Services.Application
                 return courseService.GetBestRatingCoursesAsync();
             })!;
         }
-        public  Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
+        public Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
         {
             return memoryCache.GetOrCreateAsync($"MostRecentCourses", cacheEntry =>
             {
@@ -57,7 +58,7 @@ namespace MyCourse.Models.Services.Application
 
         public Task<CourseDetailModel> CreateCourseAsysnc(CourseCreateInputModel inputModel)
         {
-           return courseService.CreateCourseAsysnc(inputModel);
+            return courseService.CreateCourseAsysnc(inputModel);
         }
         public Task<bool> IsTitleAvailableAsync(string title, int id)
         {
@@ -77,9 +78,9 @@ namespace MyCourse.Models.Services.Application
         }
 
         public Task SendQuestionToCourseAuthorAsync(int courseId, string question)
-    {
-        return courseService.SendQuestionToCourseAuthorAsync(courseId, question);
-    }
+        {
+            return courseService.SendQuestionToCourseAuthorAsync(courseId, question);
+        }
 
     }
-} 
+}

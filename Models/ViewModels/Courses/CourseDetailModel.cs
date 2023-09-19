@@ -1,8 +1,9 @@
 using System.Data;
 using MyCourse.Models.Enums;
 using MyCourse.Models.ValueObjects;
+using pgm3.Models.ViewModels.Lessons;
 
-namespace MyCourse.Models.ViewModels
+namespace pgm3.Models.ViewModels.Courses
 {
     public class CourseDetailModel : CourseViewModel
     {
@@ -36,4 +37,4 @@ namespace MyCourse.Models.ViewModels
             return courseDetailViewModel;
         }
     }
-} 
+}

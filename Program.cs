@@ -2,7 +2,6 @@ using MyCourse.Customizations.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
-using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +10,8 @@ using MyCourse.Customizations.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using pgm3.Models.Services.Application.Courses;
+using MyCourse.Models.Services.Application.Lessons;
 
 namespace CorsoMVCcore
 {
@@ -25,10 +26,10 @@ namespace CorsoMVCcore
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            // builder.Services.AddControllersWithViews(options =>
-            // {
-            //     options.Filters.Add(filter);
-            // });
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(filter);
+            });
 
             builder.Services.AddResponseCaching();
             //builder.Services.AddOutputCache();
@@ -54,8 +55,10 @@ namespace CorsoMVCcore
             });
 
             builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
+            builder.Services.AddTransient<ILessonService, AdoNetLessonService>();
             builder.Services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
             builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
+            builder.Services.AddTransient<ICachedLessonService, MemoryCacheLessonService>();
 
             builder.Services.AddTransient<IImagePersister, InsecureImagePersister>();
             builder.Services.AddSingleton<IImagePersister, MagickNetImagePersister>();

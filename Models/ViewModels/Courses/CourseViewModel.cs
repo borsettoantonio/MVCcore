@@ -2,7 +2,7 @@ using System.Data;
 using MyCourse.Models.Enums;
 using MyCourse.Models.ValueObjects;
 
-namespace MyCourse.Models.ViewModels
+namespace pgm3.Models.ViewModels.Courses
 {
     public class CourseViewModel
     {

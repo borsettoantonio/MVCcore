@@ -1,6 +1,6 @@
 using System;
 
-namespace MyCourse.Models.Exceptions
+namespace pgm3.Models.Exceptions.Infrastructure
 {
     public class ConstraintViolationException : Exception
     {

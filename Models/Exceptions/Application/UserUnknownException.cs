@@ -1,4 +1,4 @@
-namespace MyCourse.Models.Exceptions.Application;
+namespace pgm3.Models.Exceptions.Application;
 
 public class UserUnknownException : Exception
 {

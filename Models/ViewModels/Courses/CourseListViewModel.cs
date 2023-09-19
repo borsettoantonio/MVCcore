@@ -1,11 +1,12 @@
 using MyCourse.Models.InputModels;
+using MyCourse.Models.ViewModels;
 
-namespace MyCourse.Models.ViewModels
+namespace pgm3.Models.ViewModels.Courses
 {
     public class CourseListViewModel : IPaginationInfo
     {
-        public ListViewModel<CourseViewModel> Courses {get; set;}
-        public CourseListInputModel Input {get; set;}
+        public ListViewModel<CourseViewModel> Courses { get; set; }
+        public CourseListInputModel Input { get; set; }
 
         int IPaginationInfo.CurrentPage => Input.Page;
 

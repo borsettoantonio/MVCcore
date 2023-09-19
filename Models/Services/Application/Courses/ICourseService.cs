@@ -1,7 +1,8 @@
 using MyCourse.Models.InputModels;
 using MyCourse.Models.ViewModels;
+using pgm3.Models.ViewModels.Courses;
 
-namespace MyCourse.Models.Services.Application
+namespace pgm3.Models.Services.Application.Courses
 {
     public interface ICourseService
     {

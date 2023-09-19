@@ -1,4 +1,4 @@
-# MVCcore Corso Udemy MVC Core - WebHD_20-5 Autenticazione 2
-23.06.2023
+# MVCcore Corso Udemy MVC Core - WebHD_17-7 Gestione lezioni
+19.09.2023
 
-Ho iniziato a inserire l'autenticazione con Identity e ADO
+Ho inserito la gestione delle lezioni

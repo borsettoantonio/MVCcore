@@ -3,7 +3,7 @@ using Microsoft.Data.Sqlite;
 using System.Linq;
 using System.Configuration;
 using MyCourse.Models.ValueObjects;
-using MyCourse.Models.Exceptions;
+using pgm3.Models.Exceptions.Infrastructure;
 
 namespace MyCourse.Models.Services.Infrastructure
 {

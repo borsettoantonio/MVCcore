@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
 using MyCourse.Models.InputModels;
-using MyCourse.Models.Exceptions.Application;
-using MyCourse.Models.Exceptions;
+using pgm3.Models.Services.Application.Courses;
+using pgm3.Models.ViewModels.Courses;
+using pgm3.Models.Exceptions.Application;
 
 namespace MyCourse.Controllers
 {
