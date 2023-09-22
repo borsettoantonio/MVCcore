@@ -9,8 +9,10 @@
                 <h1>@ViewData["Title"]</h1>
             </div>
             <div class="col-md-3 d-flex align-items-center">
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Salva</button>
-                <button class="btn btn-danger btn-lg ml-3" type="button" data-toggle="modal" data-target="#delete-modal"><i class="fas fa-trash-alt"></i></button>
+                <button type="submit" class="btn btn-primary btn-lg d-grid "
+                    style="--bs-btn-padding-x: 3.5rem;">Salva</button>
+                <button class="btn btn-danger btn-lg ms-5 " type="button" data-bs-toggle="modal" data-bs-target="#delete-modal"><i
+                        class="fas fa-trash-alt"></i></button>
             </div>
         </div>
         <div class="row">
@@ -44,33 +46,36 @@
                 </aside>
             </div>
         </div>
-    </form>
-    <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+    
         <input type="hidden" asp-for="CourseId">
-        <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-title" aria-hidden="true">
+
+        <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-title"
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="delete-modal-title">Conferma eliminazione</h5>
-                        <button class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Stai per eliminare la lezione e tutti i suoi dati andranno persi. Confermi l'eliminazione?</p>
+                        <p>Tutti i dati andranno persi. Confermi l'eliminazione?
+                        </p>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button class="btn btn-light" type="button" data-dismiss="modal">Annulla</button>
-                        <button type="submit" class="btn btn-danger">Conferma</button>
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Conferma</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </form>
 </section>
 
 @section Scripts
-{
+    {
     <partial name="_Validation"></partial>
     <partial name="_Summernote"></partial>
 }
