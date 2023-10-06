@@ -1,4 +1,4 @@
-# MVCcore Corso Udemy MVC Core - WebHD_17-9 Cancellazione di una lezione
-22.09.2023
+# MVCcore Corso Udemy MVC Core - WebHD_17-10 Cancellazione di un corso
+06.10.2023
 
-Ho inserito la cancellazione delle lezioni, con un form modale di conferma dell'operazione
+Ho inserito la cancellazione soft dei corsi

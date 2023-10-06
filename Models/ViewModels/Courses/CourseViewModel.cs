@@ -14,7 +14,9 @@ namespace pgm3.Models.ViewModels.Courses
         public double Rating { get; set; }
         public Money? FullPrice { get; set; }
         public Money? CurrentPrice { get; set; }
+        public string Status { get; set; } = null!;
 
+        /*
         public static CourseViewModel FromDataRow(DataRow course)
         {
             return new CourseViewModel
@@ -30,9 +32,10 @@ namespace pgm3.Models.ViewModels.Courses
                 FullPrice = new Money(
                   Enum.Parse<Currency>(Convert.ToString(course["FullPrice_Currency"])),
                   Convert.ToDecimal(course["FullPrice_Amount"])),
+                Status = (string)course["Status"],  
             };
         }
-
+        */
 
     }
 }

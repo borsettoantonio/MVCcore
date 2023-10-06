@@ -4,6 +4,7 @@ using MyCourse.Models.InputModels;
 using pgm3.Models.Services.Application.Courses;
 using pgm3.Models.ViewModels.Courses;
 using pgm3.Models.Exceptions.Application;
+using MyCourse.Models.InputModels.Courses; 
 
 namespace MyCourse.Controllers
 {
@@ -102,6 +103,14 @@ namespace MyCourse.Controllers
         {
             bool result = await courseService.IsTitleAvailableAsync(title, id);
             return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(CourseDeleteInputModel inputModel)
+        {
+            await courseService.DeleteCourseAsync(inputModel);
+            TempData["ConfirmationMessage"] = "Il corso è stato eliminato ma potrebbe continuare a comparire negli elenchi per un breve periodo, finché la cache non viene aggiornata.";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

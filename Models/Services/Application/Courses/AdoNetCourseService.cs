@@ -16,6 +16,7 @@ using pgm3.Models.ViewModels.Courses;
 using pgm3.Models.ViewModels.Lessons;
 using pgm3.Models.Exceptions.Infrastructure;
 using pgm3.Models.Exceptions.Application;
+using MyCourse.Models.InputModels.Courses;
 
 namespace pgm3.Models.Services.Application.Courses
 {
@@ -50,8 +51,8 @@ namespace pgm3.Models.Services.Application.Courses
             CoursesOptions opt = new CoursesOptions();
             coursesOptions.GetSection(CoursesOptions.Courses).Bind(opt);
 
-            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}
-            ; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId={id}";
+            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency, Status FROM Courses WHERE Id={id} AND Status<>{nameof(CourseStatus.Deleted)}
+            ; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId={id} ";
 
             DataSet dataSet = await db.QueryAsync(query);
 
@@ -79,7 +80,9 @@ namespace pgm3.Models.Services.Application.Courses
             // oppure con LINQ
             var courseDetailViewModel = courseTable.AsEnumerable().Select(x => new CourseDetailModel
             {
-                Title = Convert.ToString(x["Title"]),
+				
+
+				Title = Convert.ToString(x["Title"]),
                 Description = Convert.ToString(x["Description"]),
                 ImagePath = Convert.ToString(x["ImagePath"]),
                 Author = Convert.ToString(x["Author"]),
@@ -99,8 +102,9 @@ namespace pgm3.Models.Services.Application.Courses
                     Title = Convert.ToString(x["Title"]),
                     Description = Convert.ToString(x["Description"]),
                     Duration = TimeSpan.Parse(Convert.ToString(x["Duration"]))
-                }).ToList()
-            }).First();
+                }).ToList(),
+				Status = Convert.ToString(x["Status"])
+			}).First();
 
             return courseDetailViewModel;
         }
@@ -114,8 +118,8 @@ namespace pgm3.Models.Services.Application.Courses
             }
             string direction = model.Ascending ? "ASC" : "DESC";
 
-            FormattableString query = $@"SELECT Id,Title,ImagePath,Author,Rating, FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency  FROM COURSES WHERE Title LIKE {"%" + model.Search + "%"}  ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset};
-             SELECT Count(*)  FROM COURSES WHERE Title LIKE {"%" + model.Search + "%"} ";
+            FormattableString query = $@"SELECT Id,Title,ImagePath,Author,Rating, FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency  FROM COURSES WHERE Title LIKE {"%" + model.Search + "%"} AND Status<>{nameof(CourseStatus.Deleted)} ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset};
+             SELECT Count(*)  FROM COURSES WHERE Title LIKE {"%" + model.Search + "%"} AND Status<>{nameof(CourseStatus.Deleted)}";
             DataSet dataSet = await db.QueryAsync(query);
             var table = dataSet.Tables[0];
             /*
@@ -184,8 +188,8 @@ namespace pgm3.Models.Services.Application.Courses
 
             try
             {
-                var dataSet = await db.QueryAsync($@"INSERT INTO Courses (Title,Author,ImagePath,CurrentPrice_Currency,CurrentPrice_Amount,FullPrice_currency,FullPrice_Amount)
-                          VALUES ({title},{author},'/Courses/default.png','EUR',0,'EUR',0);
+                var dataSet = await db.QueryAsync($@"INSERT INTO Courses (Title,Author,ImagePath,CurrentPrice_Currency,CurrentPrice_Amount,FullPrice_currency,FullPrice_Amount, Status, Rating)
+                          VALUES ({title},{author},'/Courses/default.png','EUR',0,'EUR',0,{nameof(CourseStatus.Draft)},4.5);
                           SELECT last_insert_rowid();");
                 int courseId = Convert.ToInt32(dataSet.Tables[0].Rows[0][0]);
                 CourseDetailModel course = await GetCourseAsync(courseId);
@@ -198,7 +202,7 @@ namespace pgm3.Models.Services.Application.Courses
         }
         public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
         {
-            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}";
+            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id} AND Status<>{nameof(CourseStatus.Deleted)}";
 
             DataSet dataSet = await db.QueryAsync(query);
 
@@ -221,10 +225,10 @@ namespace pgm3.Models.Services.Application.Courses
                 {
                     imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
                 }
-                int affectedRows = await db.CommandAsync($"UPDATE Courses SET ImagePath=COALESCE({imagePath}, ImagePath), Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency.ToString()}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency.ToString()}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id={inputModel.Id} ");
+                int affectedRows = await db.CommandAsync($"UPDATE Courses SET ImagePath=COALESCE({imagePath}, ImagePath), Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency.ToString()}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency.ToString()}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id={inputModel.Id} AND Status<>{nameof(CourseStatus.Deleted)} ");
                 if (affectedRows == 0)
                 {
-                    bool courseExists = await db.QueryScalarAsync<bool>($"SELECT COUNT(*) FROM Courses WHERE Id={inputModel.Id} ");
+                    bool courseExists = await db.QueryScalarAsync<bool>($"SELECT COUNT(*) FROM Courses WHERE Id={inputModel.Id} AND Status<>{nameof(CourseStatus.Deleted)} );");
                     if (courseExists)
                     {
                         throw new Exception();
@@ -300,6 +304,14 @@ namespace pgm3.Models.Services.Application.Courses
             catch
             {
                 throw new SendException();
+            }
+        }
+        public async Task DeleteCourseAsync(CourseDeleteInputModel inputModel)
+        {
+            int affectedRows = await this.db.CommandAsync($"UPDATE Courses SET Status={nameof(CourseStatus.Deleted)} WHERE Id={inputModel.Id} AND Status<>{nameof(CourseStatus.Deleted)}");
+            if (affectedRows == 0)
+            {
+                throw new CourseNotFoundException(inputModel.Id);
             }
         }
     }

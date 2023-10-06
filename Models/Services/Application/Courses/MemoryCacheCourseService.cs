@@ -4,6 +4,7 @@ using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.ViewModels;
 using pgm3.Models.ViewModels.Courses;
+using MyCourse.Models.InputModels.Courses;
 
 namespace pgm3.Models.Services.Application.Courses
 {
@@ -82,5 +83,10 @@ namespace pgm3.Models.Services.Application.Courses
             return courseService.SendQuestionToCourseAuthorAsync(courseId, question);
         }
 
+        public async Task DeleteCourseAsync(CourseDeleteInputModel inputModel)
+        {
+            await courseService.DeleteCourseAsync(inputModel);
+            memoryCache.Remove($"Course{inputModel.Id}");
+        }
     }
 }

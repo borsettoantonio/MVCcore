@@ -1,6 +1,7 @@
 using MyCourse.Models.InputModels;
 using MyCourse.Models.ViewModels;
 using pgm3.Models.ViewModels.Courses;
+using MyCourse.Models.InputModels.Courses;
 
 namespace pgm3.Models.Services.Application.Courses
 {
@@ -15,5 +16,6 @@ namespace pgm3.Models.Services.Application.Courses
         Task<CourseDetailModel> EditCourseAsync(CourseEditInputModel inputModel);
         Task<bool> IsTitleAvailableAsync(string title, int excludeId);
         Task SendQuestionToCourseAuthorAsync(int id, string question);
+         Task DeleteCourseAsync(CourseDeleteInputModel inputModel);
     }
 }

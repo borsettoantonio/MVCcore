@@ -2,6 +2,7 @@ using System.Data;
 using MyCourse.Models.Enums;
 using MyCourse.Models.ValueObjects;
 using pgm3.Models.ViewModels.Lessons;
+using pgm3.Models.ViewModels.Courses;
 
 namespace pgm3.Models.ViewModels.Courses
 {
@@ -14,6 +15,7 @@ namespace pgm3.Models.ViewModels.Courses
             get => TimeSpan.FromSeconds(Lessons?.Sum(l => l.Duration.TotalSeconds) ?? 0);
         }
 
+        /*
         public static new CourseDetailModel FromDataRow(DataRow courseRow)
         {
             var courseDetailViewModel = new CourseDetailModel
@@ -32,9 +34,11 @@ namespace pgm3.Models.ViewModels.Courses
                     Convert.ToDecimal(courseRow["CurrentPrice_Amount"])
                 ),
                 Id = Convert.ToInt32(courseRow["Id"]),
-                Lessons = new List<LessonViewModel>()
+                Lessons = new List<LessonViewModel>(),
+                Status = Convert.ToString(courseRow["Status"]!),
             };
             return courseDetailViewModel;
         }
+        */
     }
 }
